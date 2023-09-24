@@ -28,6 +28,16 @@ let users = [
 		name: "Peter",
 		content: "World",
 	},
+	{
+		id: 3,
+		name: "Ola",
+		content: "Example content",
+	},
+	{
+		id: 4,
+		name: "Kasia",
+		content: "Example content",
+	},
 ];
 app.get("/", (request, response) => {
 	response.send(users);
