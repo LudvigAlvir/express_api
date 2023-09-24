@@ -57,7 +57,7 @@ app.post("/", (request, response) => {
 app.put("/:id", (request, response) => {
 	const { id } = request.params;
 	const { name, content } = request.body;
-	if (typeof name == "string" && name.length > 0) {
+	if (name || content) {
 		users.forEach((user) => {
 			if (user.id == id) {
 				if (typeof content == "string" && content.length > 0) {
