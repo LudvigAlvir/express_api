@@ -1,7 +1,9 @@
 document.querySelector("#get").addEventListener("click", async (e) => {
 	e.preventDefault();
 	const message = document.querySelector(".message");
-	const response = await fetch("https://crud-examples.onrender.com/");
+	const response = await fetch(
+		"https://crud-examples.onrender.com/?name=Peter"
+	);
 	const data = await response.json();
 
 	message.innerText = "";

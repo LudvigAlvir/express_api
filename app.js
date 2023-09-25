@@ -40,7 +40,18 @@ let users = [
 	},
 ];
 app.get("/", (request, response) => {
-	response.send(users);
+	if (request.query.name) {
+		const name = request.query.name;
+		const arr = [];
+		users.forEach((user) => {
+			if (user.name == name) {
+				arr.push(user);
+			}
+		});
+		response.send(arr);
+	} else {
+		response.send(users);
+	}
 });
 
 app.get("/:id", (request, response) => {
@@ -59,6 +70,7 @@ app.get("/:id", (request, response) => {
 		});
 	}
 });
+
 app.post("/", (request, response) => {
 	const { name, content } = request.body;
 	if (typeof name == "string" && name.length > 0) {
