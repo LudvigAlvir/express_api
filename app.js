@@ -138,6 +138,39 @@ app.put("/:id", (request, response) => {
 		});
 	}
 });
+app.patch("/:id", (request, response) => {
+	const { id } = request.params;
+	const { name, content } = request.body;
+	let changed = false;
+	if (name || content) {
+		users.forEach((user) => {
+			if (user.id == id) {
+				if (typeof content == "string" && content.length > 0) {
+					user.content = content;
+				}
+				if (typeof name == "string" && name.length > 0) {
+					user.name = name;
+				}
+				changed = true;
+				response.send({
+					status: "OK",
+					message: "User with ID: " + id + " updated",
+				});
+			}
+		});
+		if (!changed) {
+			response.send({
+				status: "WARNING",
+				message: "No user with ID: " + id + " found",
+			});
+		}
+	} else {
+		response.send({
+			status: "ERROR",
+			message: "Incorrect request body",
+		});
+	}
+});
 
 app.delete("/:id", (request, response) => {
 	const { id } = request.params;
