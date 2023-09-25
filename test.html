@@ -14,9 +14,11 @@
 			src="./js/script.js"></script>
 	</head>
 	<body>
-		<form
-			action="http://127.0.0.1:3000/"
-			method="post">
+		<form action="#">
+			<label for="id">Id</label>
+			<input
+				type="number"
+				id="id" />
 			<label for="name">Name</label>
 			<input
 				type="text"
@@ -27,7 +29,10 @@
 				type="text"
 				name="content"
 				id="content" />
-			<button type="submit">Submit</button>
+			<button id="get">GET</button>
+			<button id="post">POST</button>
+			<button id="put">PUT</button>
+			<button id="delete">DELETE</button>
 		</form>
 		<div class="message"></div>
 	</body>

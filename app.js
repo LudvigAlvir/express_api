@@ -42,6 +42,23 @@ let users = [
 app.get("/", (request, response) => {
 	response.send(users);
 });
+
+app.get("/:id", (request, response) => {
+	const { id } = request.params;
+	let found = false;
+	users.forEach((user) => {
+		if (user.id == id) {
+			response.send(user);
+			found = true;
+		}
+	});
+	if (!found) {
+		response.send({
+			status: "ERROR",
+			message: "User with ID: " + id + " not found",
+		});
+	}
+});
 app.post("/", (request, response) => {
 	const { name, content } = request.body;
 	if (typeof name == "string" && name.length > 0) {
