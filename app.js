@@ -15,7 +15,7 @@ app.get("/status", (request, response) => {
 	const status = {
 		status: "RUNNING",
 	};
-	response.send(status);
+	response.status(200).send(status);
 });
 let users = [
 	{
@@ -48,9 +48,9 @@ app.get("/", (request, response) => {
 				arr.push(user);
 			}
 		});
-		response.send(arr);
+		response.status(200).send(arr);
 	} else {
-		response.send(users);
+		response.status(200).send(users);
 	}
 });
 
@@ -59,12 +59,12 @@ app.get("/:id", (request, response) => {
 	let found = false;
 	users.forEach((user) => {
 		if (user.id == id) {
-			response.send(user);
+			response.status(200).send(user);
 			found = true;
 		}
 	});
 	if (!found) {
-		response.send({
+		response.status(400).send({
 			status: "ERROR",
 			message: "User with ID: " + id + " not found",
 		});
@@ -79,14 +79,14 @@ app.post("/", (request, response) => {
 			name: name,
 			content: content ? content : "",
 		});
-		response.send({
+		response.status(201).send({
 			status: "OK",
 
 			message:
 				name + " added to the database with ID: " + users[users.length - 1].id,
 		});
 	} else {
-		response.send({
+		response.status(400).send({
 			status: "ERROR",
 			message: "Incorrect request body",
 		});
@@ -107,7 +107,7 @@ app.put("/:id", (request, response) => {
 					user.name = name;
 				}
 				changed = true;
-				response.send({
+				response.status(200).send({
 					status: "OK",
 					message: "User with ID: " + id + " updated",
 				});
@@ -126,13 +126,13 @@ app.put("/:id", (request, response) => {
 				user.name = name;
 			}
 			users.push(user);
-			response.send({
+			response.status(201).send({
 				status: "OK",
 				message: "User with ID: " + id + " created",
 			});
 		}
 	} else {
-		response.send({
+		response.status(400).send({
 			status: "ERROR",
 			message: "Incorrect request body",
 		});
@@ -152,20 +152,20 @@ app.patch("/:id", (request, response) => {
 					user.name = name;
 				}
 				changed = true;
-				response.send({
+				response.status(200).send({
 					status: "OK",
 					message: "User with ID: " + id + " updated",
 				});
 			}
 		});
 		if (!changed) {
-			response.send({
+			response.status(404).send({
 				status: "WARNING",
 				message: "No user with ID: " + id + " found",
 			});
 		}
 	} else {
-		response.send({
+		response.status(400).send({
 			status: "ERROR",
 			message: "Incorrect request body",
 		});
@@ -174,13 +174,22 @@ app.patch("/:id", (request, response) => {
 
 app.delete("/:id", (request, response) => {
 	const { id } = request.params;
+	let found = false;
 	users.forEach((user, index) => {
 		if (user.id == id) {
+			found = true;
 			users.splice(index, 1);
 		}
 	});
-	response.send({
-		status: "OK",
-		message: "User with ID: " + id + " deleted",
-	});
+	if (found) {
+		response.status(200).send({
+			status: "OK",
+			message: "User with ID: " + id + " deleted",
+		});
+	} else {
+		response.status(404).send({
+			status: "WARNING",
+			message: "No user with ID: " + id + " found",
+		});
+	}
 });
