@@ -74,11 +74,19 @@ app.get("/:id", (request, response) => {
 app.post("/", (request, response) => {
 	const { name, content } = request.body;
 	if (typeof name == "string" && name.length > 0) {
-		users.push({
-			id: users[users.length - 1].id + 1,
-			name: name,
-			content: content ? content : "",
-		});
+		if (typeof content == "string" && content.length > 0) {
+			users.push({
+				id: users[users.length - 1].id + 1,
+				name: name,
+				content: content ? content : "",
+			});
+		} else {
+			users.push({
+				id: users[users.length - 1].id + 1,
+				name: name,
+				content: "",
+			});
+		}
 		response.status(201).send({
 			status: "OK",
 
