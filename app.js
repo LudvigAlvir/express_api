@@ -103,7 +103,7 @@ app.post("/", (request, response) => {
 });
 
 app.put("/:id", (request, response) => {
-	const { idTest } = request.params;
+	const idTest = request.params.id;
 	id = parseInt(idTest);
 	if (typeof id == "number") {
 		const { name, content } = request.body;
