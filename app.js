@@ -103,47 +103,63 @@ app.post("/", (request, response) => {
 });
 
 app.put("/:id", (request, response) => {
-	const { id } = request.params;
-	const { name, content } = request.body;
-	let changed = false;
-	if (name || content) {
-		users.forEach((user) => {
-			if (user.id == id) {
+	const { idTest } = request.params;
+	id = parseInt(idTest);
+	if (typeof id == "number") {
+		const { name, content } = request.body;
+		let changed = false;
+		if (name || content) {
+			users.forEach((user) => {
+				if (user.id == id) {
+					if (typeof content == "string" && content.length > 0) {
+						user.content = content;
+					}
+					if (typeof name == "string" && name.length > 0) {
+						user.name = name;
+					}
+					changed = true;
+					response.status(200).send({
+						status: "OK",
+						message: "User with ID: " + id + " updated",
+					});
+				}
+			});
+			if (!changed) {
+				const user = {
+					id: id,
+					name: "",
+					content: "",
+				};
 				if (typeof content == "string" && content.length > 0) {
 					user.content = content;
 				}
 				if (typeof name == "string" && name.length > 0) {
 					user.name = name;
 				}
-				changed = true;
-				response.status(200).send({
+				users.push(user);
+				users = users.sort((a, b) => {
+					if (a.id < b.id) {
+						return -1;
+					}
+					if (a.id > b.id) {
+						return 1;
+					}
+				});
+				response.status(201).send({
 					status: "OK",
-					message: "User with ID: " + id + " updated",
+					message: "User with ID: " + id + " created",
 				});
 			}
-		});
-		if (!changed) {
-			const user = {
-				id: id,
-				name: "",
-				content: "",
-			};
-			if (typeof content == "string" && content.length > 0) {
-				user.content = content;
-			}
-			if (typeof name == "string" && name.length > 0) {
-				user.name = name;
-			}
-			users.push(user);
-			response.status(201).send({
-				status: "OK",
-				message: "User with ID: " + id + " created",
+		} else {
+			response.status(400).send({
+				status: "ERROR",
+				message: "Incorrect request body",
 			});
 		}
 	} else {
 		response.status(400).send({
 			status: "ERROR",
-			message: "Incorrect request body",
+			message: "Incorrect ID",
 		});
 	}
 });
