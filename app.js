@@ -97,6 +97,7 @@ app.post("/", (request, response) => {
 		response.status(400).send({
 			status: "ERROR",
 			message: "Incorrect request body",
+			error: name,
 		});
 	}
 });
